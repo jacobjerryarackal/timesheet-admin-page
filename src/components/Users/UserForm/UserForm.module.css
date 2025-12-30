@@ -70,29 +70,29 @@
 }
 
 /* Custom styles for form items */
-:global(.ant-form-item-label) {
+.userForm :global(.ant-form-item-label) {
   font-weight: 500;
 }
 
-:global(.ant-form-item-label > label) {
+.userForm :global(.ant-form-item-label > label) {
   color: rgba(0, 0, 0, 0.85) !important;
 }
 
-:global(.ant-input-affix-wrapper),
-:global(.ant-select-selector),
-:global(.ant-picker) {
+.userForm :global(.ant-input-affix-wrapper),
+.userForm :global(.ant-select-selector),
+.userForm :global(.ant-picker) {
   border-radius: 6px !important;
 }
 
-:global(.ant-input-affix-wrapper):hover,
-:global(.ant-select-selector:hover),
-:global(.ant-picker:hover) {
+.userForm :global(.ant-input-affix-wrapper):hover,
+.userForm :global(.ant-select-selector):hover,
+.userForm :global(.ant-picker):hover {
   border-color: #40a9ff !important;
 }
 
-:global(.ant-input-affix-wrapper-focused),
-:global(.ant-select-focused .ant-select-selector),
-:global(.ant-picker-focused) {
+.userForm :global(.ant-input-affix-wrapper-focused),
+.userForm :global(.ant-select-focused .ant-select-selector),
+.userForm :global(.ant-picker-focused) {
   border-color: #1890ff !important;
   box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
 }
