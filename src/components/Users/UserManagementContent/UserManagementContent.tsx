@@ -11,7 +11,7 @@ import {
   Space, 
   Modal, 
   Form,
-  Dropdown,
+  Drawer,
   message 
 } from 'antd';
 import { 
@@ -22,7 +22,8 @@ import {
 } from '@ant-design/icons';
 import UserTable from '../UserTable/UserTable';  
 import UserForm from '../UserForm/UserForm';    
-import { UserType } from '@/types';    // Import UserType
+import UserDetail from '../UserDetail/UserDetail';  // Add this import
+import { UserType } from '@/types';    
 import styles from './UserManagementContent.module.css';
 
 const { Option } = Select;
@@ -32,6 +33,8 @@ const UserManagementContent: React.FC = () => {
   const [roleFilter, setRoleFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailDrawerOpen, setIsDetailDrawerOpen] = useState(false);  // New state
+  const [selectedUser, setSelectedUser] = useState<UserType | null>(null);  // New state
   const [editingUser, setEditingUser] = useState<UserType | null>(null);
   const [selectedRows, setSelectedRows] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -68,7 +71,50 @@ const UserManagementContent: React.FC = () => {
       phone: '+1 (555) 987-6543',
       startDate: '2022-08-20',
     },
-    // Add more dummy users as needed...
+    {
+      key: '3',
+      id: 'USR-003',
+      name: 'Bob Johnson',
+      email: 'bob@company.com',
+      role: 'user',
+      department: 'sales',
+      status: 'active',
+      lastLogin: '2024-01-14T16:45:00',
+      hoursThisWeek: 40,
+      jobTitle: 'Sales Executive',
+      phone: '+1 (555) 456-7890',
+      startDate: '2023-03-10',
+      manager: 'Jane Smith',
+    },
+    {
+      key: '4',
+      id: 'USR-004',
+      name: 'Alice Brown',
+      email: 'alice@company.com',
+      role: 'supervisor',
+      department: 'hr',
+      status: 'pending',
+      lastLogin: '2024-01-13T11:20:00',
+      hoursThisWeek: 35,
+      jobTitle: 'HR Supervisor',
+      phone: '+1 (555) 321-6547',
+      startDate: '2023-06-22',
+    },
+    {
+      key: '5',
+      id: 'USR-005',
+      name: 'Charlie Wilson',
+      email: 'charlie@company.com',
+      role: 'auditor',
+      department: 'finance',
+      status: 'inactive',
+      lastLogin: '2024-01-10T13:15:00',
+      hoursThisWeek: 0,
+      jobTitle: 'Financial Auditor',
+      phone: '+1 (555) 789-0123',
+      startDate: '2022-11-30',
+      manager: 'John Doe',
+    },
   ];
 
   const filteredUsers = dummyUsers.filter(user => {
@@ -97,9 +143,14 @@ const UserManagementContent: React.FC = () => {
   };
 
   const handleView = (userId: string) => {
-    message.info(`Viewing user ${userId}`);
-    // In a real app, navigate to user detail page
-    // router.push(`/users/${userId}`);
+    // Find the user from dummy data
+    const user = dummyUsers.find(u => u.id === userId);
+    if (user) {
+      setSelectedUser(user);
+      setIsDetailDrawerOpen(true);
+    } else {
+      message.error('User not found');
+    }
   };
 
   const handleDelete = (userId: string) => {
@@ -158,6 +209,11 @@ const UserManagementContent: React.FC = () => {
 
   const handleSelectRows = (selectedRowKeys: React.Key[], selectedRows: UserType[]) => {
     setSelectedRows(selectedRows);
+  };
+
+  const handleCloseDetailDrawer = () => {
+    setIsDetailDrawerOpen(false);
+    setSelectedUser(null);
   };
 
   return (
@@ -294,6 +350,28 @@ const UserManagementContent: React.FC = () => {
           onSubmit={handleSubmit} 
         />
       </Modal>
+
+      {/* User Detail Drawer */}
+      <Drawer
+        title="User Details"
+        placement="right"
+        size="large"
+        open={isDetailDrawerOpen}
+        onClose={handleCloseDetailDrawer}
+        width={800}
+        extra={[
+          <Button key="close" onClick={handleCloseDetailDrawer}>
+            Close
+          </Button>
+        ]}
+      >
+        {selectedUser && (
+          <UserDetail 
+            userId={selectedUser.id}
+            // If you want to pass the full user data, update UserDetail props
+          />
+        )}
+      </Drawer>
     </div>
   );
 };
