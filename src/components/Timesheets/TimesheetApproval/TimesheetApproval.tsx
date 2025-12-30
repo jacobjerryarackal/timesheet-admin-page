@@ -26,7 +26,7 @@ import {
   SendOutlined
 } from '@ant-design/icons';
 import { Timesheet } from '@/types';
-import dayjs from 'dayjs';
+import dayjs from "@/utils/dayjs";
 import styles from './TimesheetApproval.module.css';
 
 const { TextArea } = Input;
