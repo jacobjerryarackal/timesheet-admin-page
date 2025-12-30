@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Layout, theme } from 'antd';
 import Sidebar from './Sidebar';
 import Header from './Header';
-import Breadcrumb from './Breadcrumb';
+import Breadcrumb from './Breadcrumb/Breadcrumb';
 import styles from '@/styles/layout.module.css';
 
 const { Content, Footer } = Layout;
