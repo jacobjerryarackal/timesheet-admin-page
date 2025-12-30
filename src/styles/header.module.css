@@ -7,7 +7,9 @@
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   position: sticky;
   top: 0;
-  z-index: 99;
+  z-index: 999;
+  height: 64px;
+  line-height: 64px;
 }
 
 .headerLeft {
@@ -23,6 +25,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: rgba(0, 0, 0, 0.65);
 }
 
 .searchBar {
@@ -37,6 +40,7 @@
   transform: translateY(-50%);
   color: rgba(0, 0, 0, 0.25);
   font-size: 14px;
+  z-index: 1;
 }
 
 .searchInput {
@@ -47,6 +51,7 @@
   font-size: 14px;
   transition: all 0.3s;
   background: #fafafa;
+  position: relative;
 }
 
 .searchInput:focus {
@@ -74,6 +79,16 @@
   align-items: center;
   justify-content: center;
   color: rgba(0, 0, 0, 0.65);
+  padding: 0;
+}
+
+.notificationBadge :global(.ant-badge-count) {
+  font-size: 12px;
+  height: 20px;
+  min-width: 20px;
+  line-height: 20px;
+  padding: 0 6px;
+  box-shadow: none;
 }
 
 .userDropdown {
@@ -93,19 +108,20 @@
 .userInfo {
   display: flex;
   flex-direction: column;
+  line-height: normal;
 }
 
 .userName {
   font-size: 14px;
   font-weight: 500;
-  line-height: 1.2;
   color: rgba(0, 0, 0, 0.85);
+  line-height: 1.2;
 }
 
 .userEmail {
   font-size: 12px;
-  line-height: 1.2;
   color: rgba(0, 0, 0, 0.45);
+  line-height: 1.2;
   margin-top: 2px;
 }
 
@@ -138,5 +154,15 @@
   
   .userInfo {
     display: none;
+  }
+  
+  .userDropdown {
+    padding: 8px;
+  }
+  
+  .headerButton {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
   }
 }

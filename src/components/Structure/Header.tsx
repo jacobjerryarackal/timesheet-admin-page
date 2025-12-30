@@ -78,6 +78,7 @@ const Header: React.FC<HeaderProps> = ({ collapsed, setCollapsed }) => {
           icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           onClick={() => setCollapsed(!collapsed)}
           className={styles.collapseButton}
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         />
         <div className={styles.searchBar}>
           <SearchOutlined className={styles.searchIcon} />
@@ -92,11 +93,12 @@ const Header: React.FC<HeaderProps> = ({ collapsed, setCollapsed }) => {
       <div className={styles.headerRight}>
         <Space size="middle">
           <Dropdown menu={{ items: notificationItems }} placement="bottomRight">
-            <Badge count={5} size="small">
+            <Badge count={5} size="small" className={styles.notificationBadge}>
               <Button 
                 type="text" 
                 icon={<BellOutlined />} 
                 className={styles.headerButton}
+                aria-label="Notifications"
               />
             </Badge>
           </Dropdown>
@@ -105,6 +107,7 @@ const Header: React.FC<HeaderProps> = ({ collapsed, setCollapsed }) => {
             type="text" 
             icon={<QuestionCircleOutlined />} 
             className={styles.headerButton}
+            aria-label="Help"
           />
           
           <Dropdown menu={{ items }} placement="bottomRight">
