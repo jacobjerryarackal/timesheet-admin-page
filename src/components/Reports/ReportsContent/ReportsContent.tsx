@@ -64,6 +64,7 @@ interface DepartmentData {
   name: string;
   value: number;
   color: string;
+  [key: string]: string | number;
 }
 
 const ReportsContent: React.FC = () => {
@@ -378,7 +379,11 @@ const ReportsContent: React.FC = () => {
                           cx="50%"
                           cy="50%"
                           labelLine={false}
-                          label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                          label={({ name, percent }) =>
+                            percent !== undefined
+                                ? `${name}: ${(percent * 100).toFixed(0)}%`
+                                : name
+                            }
                           outerRadius={80}
                           fill="#8884d8"
                           dataKey="value"
