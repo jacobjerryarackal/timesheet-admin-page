@@ -1,0 +1,311 @@
+.leaveManagement {
+  padding: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.headerLeft {
+  flex: 1;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.subtitle {
+  color: rgba(0, 0, 0, 0.45);
+  margin: 0;
+  font-size: 14px;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.statsRow {
+  margin-bottom: 24px;
+}
+
+.statCard {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 
+              0 3px 6px 0 rgba(0, 0, 0, 0.12), 
+              0 5px 12px 4px rgba(0, 0, 0, 0.09);
+  transition: all 0.3s;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px -8px rgba(0, 0, 0, 0.08), 
+              0 9px 28px 0 rgba(0, 0, 0, 0.05), 
+              0 12px 48px 16px rgba(0, 0, 0, 0.03);
+}
+
+.statContent {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.statIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.statInfo {
+  flex: 1;
+}
+
+.statValue {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.statLabel {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.45);
+  margin-top: 4px;
+}
+
+.calendarCard {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 
+              0 3px 6px 0 rgba(0, 0, 0, 0.12), 
+              0 5px 12px 4px rgba(0, 0, 0, 0.09);
+  height: 100%;
+}
+
+.filterCard {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 
+              0 3px 6px 0 rgba(0, 0, 0, 0.12), 
+              0 5px 12px 4px rgba(0, 0, 0, 0.09);
+  margin-bottom: 16px;
+}
+
+.upcomingCard {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 
+              0 3px 6px 0 rgba(0, 0, 0, 0.12), 
+              0 5px 12px 4px rgba(0, 0, 0, 0.09);
+  height: calc(100% - 32px);
+}
+
+.tableCard {
+  margin-top: 24px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 
+              0 3px 6px 0 rgba(0, 0, 0, 0.12), 
+              0 5px 12px 4px rgba(0, 0, 0, 0.09);
+}
+
+.userCell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.userName {
+  font-weight: 500;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.userEmail {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  margin-top: 2px;
+}
+
+.dateCell {
+  display: flex;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+}
+
+.durationCell {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.durationValue {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.durationLabel {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.calendar {
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+}
+
+.calendarEvents {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.calendarEvent {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eventDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+}
+
+.calendarEvent.pending .eventDot {
+  background: #faad14;
+}
+
+.calendarEvent.approved .eventDot {
+  background: #52c41a;
+}
+
+.calendarEvent.rejected .eventDot {
+  background: #ff4d4f;
+}
+
+.calendarLegend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legendDot.pending {
+  background: #faad14;
+}
+
+.legendDot.approved {
+  background: #52c41a;
+}
+
+.legendDot.rejected {
+  background: #ff4d4f;
+}
+
+.upcomingItem {
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.upcomingItem:last-child {
+  border-bottom: none;
+}
+
+.upcomingDate {
+  font-size: 14px;
+  color: #1890ff;
+  font-weight: 500;
+}
+
+.leaveDetail {
+  padding: 8px 0;
+}
+
+.detailItem {
+  margin-bottom: 16px;
+}
+
+.detailItem label {
+  display: block;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.85);
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.detailItem span {
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 14px;
+}
+
+.reason,
+.notes {
+  background: #fafafa;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  padding: 12px;
+  margin-top: 8px;
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+  }
+  
+  .headerRight {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .calendarLegend {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  
+  .upcomingItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .upcomingDate {
+    align-self: flex-start;
+  }
+}
