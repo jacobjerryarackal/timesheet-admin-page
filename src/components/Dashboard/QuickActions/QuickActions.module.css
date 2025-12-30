@@ -50,6 +50,19 @@
   min-width: 0;
 }
 
+.actionRow {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.actionRow:hover {
+  background: #f5f7fa;
+}
+
 .actionTitle {
   font-weight: 500;
   font-size: 14px;
@@ -75,6 +88,35 @@
 
 .actionCount {
   flex-shrink: 0;
+}
+
+.badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: lowercase;
+}
+
+.pending {
+  background: #fff7e6;
+  color: #fa8c16;
+}
+
+.urgent {
+  background: #fff1f0;
+  color: #f5222d;
+}
+
+.countBadge {
+  min-width: 28px;
+  height: 28px;
+  border-radius: 14px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .pendingSection,

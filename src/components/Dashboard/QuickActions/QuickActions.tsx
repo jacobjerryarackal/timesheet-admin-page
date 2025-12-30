@@ -152,44 +152,42 @@ const QuickActions: React.FC = () => {
       {/* Quick Action Buttons */}
       <div className={styles.actionButtons}>
         {quickActions.map((action) => (
-          <div key={action.id} className={styles.actionButtonWrapper}>
-            <Button
-              type="text"
-              className={styles.actionButton}
-              onClick={() => console.log(`Action: ${action.title}`)}
+          <div key={action.id} className={styles.actionRow}>
+            <div
+              className={styles.actionIcon}
+              style={{ backgroundColor: `${action.color}15` }}
             >
-              <div className={styles.actionIcon} style={{ backgroundColor: `${action.color}15` }}>
-                {React.cloneElement(action.icon as React.ReactElement, { 
-                  style: { color: action.color, fontSize: '20px' } 
-                })}
+              {React.cloneElement(action.icon as React.ReactElement, {
+                style: { color: action.color, fontSize: 20 },
+              })}
+            </div>
+
+            <div className={styles.actionContent}>
+              <div className={styles.actionTitle}>
+                {action.title}
+                {action.badge && (
+                  <span className={`${styles.badge} ${styles[action.badge]}`}>
+                    {action.badge}
+                  </span>
+                )}
               </div>
-              <div className={styles.actionContent}>
-                <div className={styles.actionTitle}>
-                  {action.title}
-                  {action.badge && (
-                    <Tag 
-                      color={getBadgeColor(action.badge)} 
-                      className={styles.actionBadge}
-                    >
-                      {action.badge}
-                    </Tag>
-                  )}
-                </div>
-                <div className={styles.actionDescription}>
-                  {action.description}
-                </div>
+              <div className={styles.actionDescription}>
+                {action.description}
               </div>
-              {action.count && (
-                <Badge 
-                  count={action.count} 
-                  style={{ backgroundColor: action.color }}
-                  className={styles.actionCount}
-                />
-              )}
-            </Button>
+            </div>
+
+            {action.count && (
+              <div
+                className={styles.countBadge}
+                style={{ backgroundColor: action.color }}
+              >
+                {action.count}
+              </div>
+            )}
           </div>
         ))}
       </div>
+
 
       {/* Pending Items */}
       <div className={styles.pendingSection}>
