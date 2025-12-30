@@ -1,0 +1,137 @@
+.settingsContent {
+  padding: 0;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.subtitle {
+  color: rgba(0, 0, 0, 0.45);
+  margin: 0;
+  font-size: 14px;
+}
+
+.settingsTabs {
+  margin-bottom: 24px;
+}
+
+.settingsTabs .ant-tabs-nav {
+  margin-bottom: 0;
+}
+
+.settingsTabs .ant-tabs-tab {
+  padding: 12px 16px;
+  font-size: 14px;
+}
+
+.settingsTabs .ant-tabs-tab-active {
+  font-weight: 500;
+}
+
+.switchLabel {
+  margin-left: 12px;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 24px;
+  background: #fafafa;
+  border-radius: 8px;
+  margin-top: 24px;
+}
+
+.holidayActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.holidayList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.holidayItem {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: #fafafa;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.holidayItem:hover {
+  border-color: #1890ff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.holidayDate {
+  min-width: 80px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 16px;
+  color: #1890ff;
+}
+
+.holidayInfo {
+  flex: 1;
+  padding: 0 16px;
+}
+
+.holidayName {
+  font-weight: 500;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.85);
+  margin-bottom: 4px;
+}
+
+.holidayDescription {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.holidayActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .holidayItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .holidayDate {
+    align-self: flex-start;
+  }
+  
+  .holidayActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .formActions {
+    flex-direction: column;
+  }
+  
+  .formActions button {
+    width: 100%;
+  }
+}
