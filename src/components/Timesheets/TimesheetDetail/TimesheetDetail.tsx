@@ -13,7 +13,6 @@ import {
   Button, 
   Space,
   Table,
-  Divider,
   Timeline,
   Badge
 } from 'antd';
@@ -353,7 +352,7 @@ const TimesheetDetail: React.FC<TimesheetDetailProps> = ({
                 />
               </Col>
               <Col xs={24}>
-                <Divider orientation="left">Breakdown</Divider>
+                <div className={styles.sectionHeader}>Breakdown</div>
                 <div className={styles.breakdown}>
                   <div className={styles.breakdownItem}>
                     <div className={styles.breakdownLabel}>
