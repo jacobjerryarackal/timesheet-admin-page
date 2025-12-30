@@ -5,11 +5,9 @@ import {
   Row, 
   Col, 
   Card, 
-  Table, 
   Button, 
   Input, 
   Select, 
-  Tag, 
   Space, 
   Modal, 
   Form,
@@ -19,30 +17,15 @@ import {
 import { 
   SearchOutlined, 
   PlusOutlined, 
-  EditOutlined, 
-  DeleteOutlined, 
-  MoreOutlined,
-  UserAddOutlined,
-  DownloadOutlined
+  DownloadOutlined,
+  UserAddOutlined
 } from '@ant-design/icons';
-import type { ColumnsType } from 'antd/es/table';
-import UserForm from '../UserForm/UserForm';
+import UserTable from '../UserTable/UserTable';  
+import UserForm from '../UserForm/UserForm';    
+import { UserType } from '@/types';    // Import UserType
 import styles from './UserManagementContent.module.css';
 
 const { Option } = Select;
-
-interface UserType {
-  key: string;
-  id: string;
-  name: string;
-  email: string;
-  role: 'admin' | 'manager' | 'user';
-  department: string;
-  status: 'active' | 'inactive' | 'pending';
-  lastLogin: string;
-  hoursThisWeek: number;
-  avatar?: string;
-}
 
 const UserManagementContent: React.FC = () => {
   const [searchText, setSearchText] = useState('');
@@ -50,9 +33,11 @@ const UserManagementContent: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<UserType | null>(null);
+  const [selectedRows, setSelectedRows] = useState<UserType[]>([]);
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
-  // Dummy data
+  // Dummy data - In real app, this would come from an API
   const dummyUsers: UserType[] = [
     {
       key: '1',
@@ -60,10 +45,14 @@ const UserManagementContent: React.FC = () => {
       name: 'John Doe',
       email: 'john@company.com',
       role: 'admin',
-      department: 'IT',
+      department: 'engineering',
       status: 'active',
-      lastLogin: '2024-01-15 14:30',
+      lastLogin: '2024-01-15T14:30:00',
       hoursThisWeek: 42,
+      jobTitle: 'Senior Developer',
+      phone: '+1 (555) 123-4567',
+      startDate: '2023-01-15',
+      manager: 'Jane Smith',
     },
     {
       key: '2',
@@ -71,185 +60,35 @@ const UserManagementContent: React.FC = () => {
       name: 'Jane Smith',
       email: 'jane@company.com',
       role: 'manager',
-      department: 'HR',
+      department: 'marketing',
       status: 'active',
-      lastLogin: '2024-01-15 09:15',
+      lastLogin: '2024-01-15T09:15:00',
       hoursThisWeek: 38,
+      jobTitle: 'Marketing Director',
+      phone: '+1 (555) 987-6543',
+      startDate: '2022-08-20',
     },
-    {
-      key: '3',
-      id: 'USR-003',
-      name: 'Robert Johnson',
-      email: 'robert@company.com',
-      role: 'user',
-      department: 'Engineering',
-      status: 'active',
-      lastLogin: '2024-01-14 16:45',
-      hoursThisWeek: 40,
-    },
-    {
-      key: '4',
-      id: 'USR-004',
-      name: 'Sarah Williams',
-      email: 'sarah@company.com',
-      role: 'user',
-      department: 'Marketing',
-      status: 'inactive',
-      lastLogin: '2024-01-10 11:20',
-      hoursThisWeek: 0,
-    },
-    {
-      key: '5',
-      id: 'USR-005',
-      name: 'Michael Brown',
-      email: 'michael@company.com',
-      role: 'manager',
-      department: 'Sales',
-      status: 'pending',
-      lastLogin: '2024-01-13 13:10',
-      hoursThisWeek: 35,
-    },
-  ];
-
-  const columns: ColumnsType<UserType> = [
-    {
-      title: 'User ID',
-      dataIndex: 'id',
-      key: 'id',
-      width: 120,
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record) => (
-        <div className={styles.userCell}>
-          <div className={styles.avatar}>
-            {record.name.charAt(0)}
-          </div>
-          <div>
-            <div className={styles.userName}>{text}</div>
-            <div className={styles.userEmail}>{record.email}</div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: 'Role',
-      dataIndex: 'role',
-      key: 'role',
-      width: 120,
-      render: (role: string) => {
-        const colors = {
-          admin: 'red',
-          manager: 'blue',
-          user: 'green',
-        };
-        return (
-          <Tag color={colors[role as keyof typeof colors]} style={{ textTransform: 'capitalize' }}>
-            {role}
-          </Tag>
-        );
-      },
-    },
-    {
-      title: 'Department',
-      dataIndex: 'department',
-      key: 'department',
-      width: 150,
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      width: 120,
-      render: (status: string) => {
-        const colors = {
-          active: 'success',
-          inactive: 'default',
-          pending: 'warning',
-        };
-        return (
-          <Tag color={colors[status as keyof typeof colors]} style={{ textTransform: 'capitalize' }}>
-            {status}
-          </Tag>
-        );
-      },
-    },
-    {
-      title: 'Hours This Week',
-      dataIndex: 'hoursThisWeek',
-      key: 'hoursThisWeek',
-      width: 140,
-      render: (hours: number) => (
-        <div className={styles.hoursCell}>
-          <span className={styles.hoursValue}>{hours}</span>
-          <span className={styles.hoursLabel}>/40 hrs</span>
-          <div className={styles.hoursProgress}>
-            <div 
-              className={styles.hoursProgressBar} 
-              style={{ width: `${Math.min((hours / 40) * 100, 100)}%` }}
-            />
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: 'Last Login',
-      dataIndex: 'lastLogin',
-      key: 'lastLogin',
-      width: 180,
-    },
-    {
-      title: 'Actions',
-      key: 'actions',
-      width: 100,
-      render: (_, record) => (
-        <Dropdown
-          menu={{
-            items: [
-              {
-                key: 'edit',
-                label: 'Edit User',
-                icon: <EditOutlined />,
-                onClick: () => handleEdit(record),
-              },
-              {
-                key: 'view',
-                label: 'View Details',
-                onClick: () => handleView(record.id),
-              },
-              {
-                type: 'divider',
-              },
-              {
-                key: 'delete',
-                label: 'Delete User',
-                icon: <DeleteOutlined />,
-                danger: true,
-                onClick: () => handleDelete(record.id),
-              },
-            ],
-          }}
-          trigger={['click']}
-        >
-          <Button type="text" icon={<MoreOutlined />} />
-        </Dropdown>
-      ),
-    },
+    // Add more dummy users as needed...
   ];
 
   const filteredUsers = dummyUsers.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchText.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchText.toLowerCase());
+    const matchesSearch = 
+      user.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchText.toLowerCase()) ||
+      user.id.toLowerCase().includes(searchText.toLowerCase());
+    
     const matchesRole = roleFilter === 'all' || user.role === roleFilter;
     const matchesStatus = statusFilter === 'all' || user.status === statusFilter;
+    
     return matchesSearch && matchesRole && matchesStatus;
   });
+
+  // --- HANDLER FUNCTIONS ---
 
   const handleAddUser = () => {
     setEditingUser(null);
     setIsModalOpen(true);
+    form.resetFields();
   };
 
   const handleEdit = (user: UserType) => {
@@ -259,7 +98,8 @@ const UserManagementContent: React.FC = () => {
 
   const handleView = (userId: string) => {
     message.info(`Viewing user ${userId}`);
-    // Navigate to user detail page
+    // In a real app, navigate to user detail page
+    // router.push(`/users/${userId}`);
   };
 
   const handleDelete = (userId: string) => {
@@ -271,18 +111,53 @@ const UserManagementContent: React.FC = () => {
       cancelText: 'Cancel',
       onOk: () => {
         message.success(`User ${userId} deleted successfully`);
+        // In real app, make API call to delete user
       },
     });
   };
 
   const handleSubmit = (values: any) => {
-    if (editingUser) {
-      message.success(`User ${editingUser.name} updated successfully`);
-    } else {
-      message.success('New user added successfully');
+    setLoading(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      if (editingUser) {
+        message.success(`User ${editingUser.name} updated successfully`);
+      } else {
+        message.success('New user added successfully');
+      }
+      
+      setLoading(false);
+      setIsModalOpen(false);
+      form.resetFields();
+    }, 1000);
+  };
+
+  const handleExport = () => {
+    message.success('Users exported successfully');
+  };
+
+  const handleBulkDelete = () => {
+    if (selectedRows.length === 0) {
+      message.warning('Please select users to delete');
+      return;
     }
-    setIsModalOpen(false);
-    form.resetFields();
+    
+    Modal.confirm({
+      title: `Delete ${selectedRows.length} Users`,
+      content: 'Are you sure you want to delete all selected users? This action cannot be undone.',
+      okText: 'Delete All',
+      okType: 'danger',
+      cancelText: 'Cancel',
+      onOk: () => {
+        message.success(`${selectedRows.length} users deleted successfully`);
+        setSelectedRows([]);
+      },
+    });
+  };
+
+  const handleSelectRows = (selectedRowKeys: React.Key[], selectedRows: UserType[]) => {
+    setSelectedRows(selectedRows);
   };
 
   return (
@@ -294,7 +169,20 @@ const UserManagementContent: React.FC = () => {
         </div>
         <div className={styles.headerRight}>
           <Space>
-            <Button icon={<DownloadOutlined />}>Export</Button>
+            <Button 
+              icon={<DownloadOutlined />}
+              onClick={handleExport}
+            >
+              Export
+            </Button>
+            {selectedRows.length > 0 && (
+              <Button 
+                danger
+                onClick={handleBulkDelete}
+              >
+                Delete Selected ({selectedRows.length})
+              </Button>
+            )}
             <Button 
               type="primary" 
               icon={<UserAddOutlined />}
@@ -311,15 +199,17 @@ const UserManagementContent: React.FC = () => {
         <Row gutter={[16, 16]} align="middle">
           <Col xs={24} sm={12} md={6}>
             <Input
-              placeholder="Search users..."
+              placeholder="Search users by name, email, or ID..."
               prefix={<SearchOutlined />}
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
               allowClear
+              size="large"
             />
           </Col>
           <Col xs={12} sm={6} md={4}>
             <Select
+              size="large"
               style={{ width: '100%' }}
               placeholder="Role"
               value={roleFilter}
@@ -330,10 +220,13 @@ const UserManagementContent: React.FC = () => {
               <Option value="admin">Admin</Option>
               <Option value="manager">Manager</Option>
               <Option value="user">User</Option>
+              <Option value="supervisor">Supervisor</Option>
+              <Option value="auditor">Auditor</Option>
             </Select>
           </Col>
           <Col xs={12} sm={6} md={4}>
             <Select
+              size="large"
               style={{ width: '100%' }}
               placeholder="Status"
               value={statusFilter}
@@ -344,29 +237,43 @@ const UserManagementContent: React.FC = () => {
               <Option value="active">Active</Option>
               <Option value="inactive">Inactive</Option>
               <Option value="pending">Pending</Option>
+              <Option value="suspended">Suspended</Option>
             </Select>
           </Col>
           <Col xs={24} md={10}>
             <Space style={{ float: 'right' }}>
-              <Button>Reset Filters</Button>
-              <Button type="primary">Apply Filters</Button>
+              <Button 
+                size="large"
+                onClick={() => {
+                  setSearchText('');
+                  setRoleFilter('all');
+                  setStatusFilter('all');
+                }}
+              >
+                Reset Filters
+              </Button>
             </Space>
           </Col>
         </Row>
       </Card>
 
-      {/* Users Table */}
+      {/* Users Table - USING THE NEW UserTable COMPONENT */}
       <Card className={styles.tableCard}>
-        <Table
-          columns={columns}
-          dataSource={filteredUsers}
+        <UserTable
+          data={filteredUsers}
+          loading={loading}
+          onEdit={handleEdit}
+          onView={handleView}
+          onDelete={handleDelete}
+          onSelectRows={handleSelectRows}
+          scroll={{ x: 1500, y: 500 }}
           pagination={{
             pageSize: 10,
             showSizeChanger: true,
             showQuickJumper: true,
             showTotal: (total) => `Total ${total} users`,
+            position: ['bottomRight'],
           }}
-          scroll={{ x: 1200 }}
         />
       </Card>
 
@@ -379,7 +286,7 @@ const UserManagementContent: React.FC = () => {
           form.resetFields();
         }}
         footer={null}
-        width={600}
+        width={800}
         destroyOnClose
       >
         <UserForm 
