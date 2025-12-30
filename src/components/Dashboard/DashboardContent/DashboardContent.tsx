@@ -11,8 +11,8 @@ import {
   ArrowDownOutlined 
 } from '@ant-design/icons';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import RecentActivity from './RecentActivity';
-import QuickActions from './QuickActions';
+import RecentActivity from '../RecentActivity/RecentActivity';
+import QuickActions from '../QuickActions/QuickActions';
 import styles from './DashboardContent.module.css';
 
 const { Title, Text } = Typography;

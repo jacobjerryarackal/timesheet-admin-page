@@ -1,0 +1,149 @@
+.recentActivity {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 
+              0 3px 6px 0 rgba(0, 0, 0, 0.12), 
+              0 5px 12px 4px rgba(0, 0, 0, 0.09);
+  height: 100%;
+}
+
+.activityList {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.activityItem {
+  padding: 16px 0 !important;
+  border-bottom: 1px solid #f0f0f0 !important;
+  transition: all 0.3s;
+}
+
+.activityItem:last-child {
+  border-bottom: none !important;
+}
+
+.activityItem:hover {
+  background-color: #fafafa;
+}
+
+.activityContent {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex: 1;
+}
+
+.activityIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #f0f7ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1890ff;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.activityDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.activityHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.activityTitle {
+  font-weight: 500;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.statusTag {
+  font-size: 10px;
+  padding: 2px 8px;
+  line-height: 1;
+  border-radius: 10px;
+}
+
+.activityTime {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.activityDescription {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.65);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.activityUser {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.userAvatar {
+  background: #1890ff;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.userName {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.actionButton {
+  padding: 0;
+  height: auto;
+  font-size: 12px;
+  color: #1890ff;
+  flex-shrink: 0;
+}
+
+/* Scrollbar styling for activity list */
+.activityList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.activityList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+.activityList::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 2px;
+}
+
+.activityList::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+@media (max-width: 768px) {
+  .activityContent {
+    gap: 12px;
+  }
+  
+  .activityHeader {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .activityTime {
+    align-self: flex-start;
+  }
+}
