@@ -71,14 +71,23 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
       collapsed={collapsed}
       className={styles.sider}
       width={250}
+      collapsedWidth={80}
+      breakpoint="lg"
+      onBreakpoint={(broken) => {
+        if (broken) {
+          // Auto-collapse on mobile
+        }
+      }}
     >
       <div className={styles.logoSection}>
-        <div className={styles.logo}>
+        <div className={`${styles.logo} ${collapsed ? styles.logoCollapsed : ''}`}>
           {collapsed ? 'TP' : 'TimeTrack Pro'}
         </div>
-        <div className={styles.logoSubtitle}>
-          {!collapsed && 'Admin Panel'}
-        </div>
+        {!collapsed && (
+          <div className={styles.logoSubtitle}>
+            Admin Panel
+          </div>
+        )}
       </div>
 
       <Menu
@@ -90,7 +99,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         className={styles.menu}
       />
 
-      <div className={styles.userSection}>
+      <div className={`${styles.userSection} ${collapsed ? styles.userSectionCollapsed : ''}`}>
         <div className={styles.userInfo}>
           <Avatar 
             size={collapsed ? 32 : 40} 
@@ -106,7 +115,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         </div>
         
         <Tooltip title="Logout" placement="right">
-          <div className={styles.logoutButton}>
+          <div className={`${styles.logoutButton} ${collapsed ? styles.logoutButtonCollapsed : ''}`}>
             <LogoutOutlined />
             {!collapsed && <span>Logout</span>}
           </div>

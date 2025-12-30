@@ -4,7 +4,7 @@
   left: 0;
   top: 0;
   bottom: 0;
-  z-index: 100;
+  z-index: 1000;
   overflow: auto;
   box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
 }
@@ -17,6 +17,7 @@
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
 }
 
 .logo {
@@ -25,9 +26,12 @@
   font-weight: 600;
   line-height: 1.2;
   text-align: center;
-  overflow: hidden;
   white-space: nowrap;
-  text-overflow: ellipsis;
+  transition: all 0.2s;
+}
+
+.logoCollapsed {
+  font-size: 18px;
 }
 
 .logoSubtitle {
@@ -35,6 +39,9 @@
   font-size: 12px;
   margin-top: 2px;
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .menu {
@@ -44,15 +51,41 @@
   overflow: auto;
 }
 
+.menu :global(.ant-menu-item) {
+  margin: 4px 8px !important;
+  padding: 0 16px !important;
+  height: 40px;
+  line-height: 40px;
+}
+
+.menu :global(.ant-menu-item-selected) {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.menu :global(.ant-menu-item .ant-menu-item-icon) {
+  font-size: 16px;
+}
+
+.menu :global(.ant-menu-item .ant-menu-title-content) {
+  font-size: 14px;
+}
+
 .userSection {
   padding: 16px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s;
+}
+
+.userSectionCollapsed {
+  padding: 16px 8px;
 }
 
 .userInfo {
   display: flex;
   align-items: center;
   margin-bottom: 16px;
+  gap: 12px;
+  overflow: hidden;
 }
 
 .avatar {
@@ -61,8 +94,8 @@
 }
 
 .userDetails {
-  margin-left: 12px;
   overflow: hidden;
+  min-width: 0;
 }
 
 .userName {
@@ -70,6 +103,9 @@
   font-weight: 500;
   font-size: 14px;
   line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .userRole {
@@ -77,6 +113,9 @@
   font-size: 12px;
   line-height: 1.2;
   margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .logoutButton {
@@ -87,6 +126,7 @@
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s;
+  gap: 8px;
 }
 
 .logoutButton:hover {
@@ -94,8 +134,12 @@
   color: white;
 }
 
+.logoutButtonCollapsed {
+  justify-content: center;
+  padding: 8px;
+}
+
 .logoutButton span {
-  margin-left: 8px;
   font-size: 14px;
 }
 
@@ -103,9 +147,44 @@
 @media (max-width: 768px) {
   .sider {
     position: absolute !important;
+    height: 100vh;
+  }
+  
+  .logoSection {
+    padding: 12px 8px;
+  }
+  
+  .logo {
+    font-size: 16px;
   }
   
   .logoSubtitle {
     display: none;
   }
+  
+  .userDetails {
+    display: none;
+  }
+  
+  .logoutButton span {
+    display: none;
+  }
+}
+
+/* Scrollbar styling for sidebar */
+.sider::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sider::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sider::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+.sider::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
