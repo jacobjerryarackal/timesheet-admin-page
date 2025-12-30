@@ -1,0 +1,67 @@
+/* Common card styles */
+.card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 
+              0 3px 6px 0 rgba(0, 0, 0, 0.12), 
+              0 5px 12px 4px rgba(0, 0, 0, 0.09);
+  transition: all 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 6px 16px -8px rgba(0, 0, 0, 0.08), 
+              0 9px 28px 0 rgba(0, 0, 0, 0.05), 
+              0 12px 48px 16px rgba(0, 0, 0, 0.03);
+}
+
+/* Common table container */
+.tableContainer {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 
+              0 3px 6px 0 rgba(0, 0, 0, 0.12), 
+              0 5px 12px 4px rgba(0, 0, 0, 0.09);
+}
+
+/* Form styles */
+.formContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Page header */
+.pageHeader {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.pageHeader h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.pageHeader p {
+  color: rgba(0, 0, 0, 0.45);
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Responsive grid */
+.responsiveGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .responsiveGrid {
+    grid-template-columns: 1fr;
+  }
+}
