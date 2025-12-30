@@ -1,0 +1,172 @@
+.reportsContent {
+  padding: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.headerLeft {
+  flex: 1;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.subtitle {
+  color: rgba(0, 0, 0, 0.45);
+  margin: 0;
+  font-size: 14px;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.filterCard {
+  margin-bottom: 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 
+              0 3px 6px 0 rgba(0, 0, 0, 0.12), 
+              0 5px 12px 4px rgba(0, 0, 0, 0.09);
+}
+
+.statsRow {
+  margin-bottom: 24px;
+}
+
+.statCard {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 
+              0 3px 6px 0 rgba(0, 0, 0, 0.12), 
+              0 5px 12px 4px rgba(0, 0, 0, 0.09);
+  transition: all 0.3s;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px -8px rgba(0, 0, 0, 0.08), 
+              0 9px 28px 0 rgba(0, 0, 0, 0.05), 
+              0 12px 48px 16px rgba(0, 0, 0, 0.03);
+}
+
+.statTrend {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  margin-top: 8px;
+}
+
+.mainCard {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 
+              0 3px 6px 0 rgba(0, 0, 0, 0.12), 
+              0 5px 12px 4px rgba(0, 0, 0, 0.09);
+}
+
+.complianceCell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.complianceBar {
+  flex: 1;
+  height: 8px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.complianceFill {
+  height: 100%;
+  background: #52c41a;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.complianceValue {
+  font-weight: 500;
+  font-size: 14px;
+  min-width: 40px;
+  text-align: right;
+}
+
+.complianceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.complianceCard {
+  background: #fafafa;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.complianceCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #1890ff;
+}
+
+.complianceHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.complianceValue {
+  font-size: 32px;
+  font-weight: 600;
+  color: #52c41a;
+  margin: 8px 0;
+}
+
+.complianceDetails {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+  }
+  
+  .headerRight {
+    width: 100%;
+  }
+  
+  .complianceGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .complianceCard {
+    text-align: left;
+  }
+  
+  .complianceHeader {
+    justify-content: flex-start;
+  }
+}
