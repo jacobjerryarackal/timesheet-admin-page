@@ -26,7 +26,7 @@ import {
   DownloadOutlined
 } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
-import UserForm from './UserForm';
+import UserForm from '../UserForm/UserForm';
 import styles from './UserManagementContent.module.css';
 
 const { Option } = Select;

@@ -1,6 +1,6 @@
 import React from 'react';
 import MainLayout from '@/components/Structure/MainLayout';
-import UserManagementContent from '@/components/Users/UserManagementContent';
+import UserManagementContent from '@/components/Users/UserManagementContent/UserManagementContent';
 
 export default function UsersPage() {
   return (

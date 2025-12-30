@@ -1,0 +1,114 @@
+.userForm {
+  padding: 16px 0;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+  font-weight: 500;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.sectionTitle svg {
+  color: #1890ff;
+}
+
+.upload {
+  width: 100%;
+}
+
+.upload :global(.ant-upload-select) {
+  width: 104px;
+  height: 104px;
+  margin: 0;
+}
+
+.upload :global(.ant-upload-list-item) {
+  width: 104px;
+  height: 104px;
+  margin: 0 8px 0 0;
+}
+
+.permissionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+}
+
+.permissionItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.permissionLabel {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.permissionLabel:hover {
+  color: #1890ff;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 24px;
+  border-top: 1px solid #f0f0f0;
+  margin-top: 16px;
+}
+
+/* Custom styles for form items */
+:global(.ant-form-item-label) {
+  font-weight: 500;
+}
+
+:global(.ant-form-item-label > label) {
+  color: rgba(0, 0, 0, 0.85) !important;
+}
+
+:global(.ant-input-affix-wrapper),
+:global(.ant-select-selector),
+:global(.ant-picker) {
+  border-radius: 6px !important;
+}
+
+:global(.ant-input-affix-wrapper):hover,
+:global(.ant-select-selector:hover),
+:global(.ant-picker:hover) {
+  border-color: #40a9ff !important;
+}
+
+:global(.ant-input-affix-wrapper-focused),
+:global(.ant-select-focused .ant-select-selector),
+:global(.ant-picker-focused) {
+  border-color: #1890ff !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .permissionsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .formActions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .formActions button {
+    width: 100%;
+  }
+}
