@@ -32,11 +32,20 @@ export interface TimeEntry {
 export interface Timesheet {
   id: string;
   userId: string;
+  userName?: string;
+  userEmail?: string;
   weekStart: Date;
   weekEnd: Date;
   totalHours: number;
-  entries: TimeEntry[];
+  targetHours?: number;
+  project?: string;
+  department?: string;
   status: 'draft' | 'submitted' | 'approved' | 'rejected';
+  submittedDate: string;
+  approvedBy?: string;
+  approvedDate?: string;
+  notes?: string;
+  entries: TimeEntry[];
 }
 
 export interface DashboardStats {

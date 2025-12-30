@@ -5,316 +5,199 @@ import {
   Row, 
   Col, 
   Card, 
-  Table, 
   Button, 
   Input, 
   Select, 
-  Tag, 
   Space, 
   Modal, 
   DatePicker,
   Badge,
   Dropdown,
   message,
-  Progress,
-  Tooltip
+  Tooltip,
+  Tabs,
+  Divider
 } from 'antd';
 import { 
   SearchOutlined, 
   FilterOutlined, 
-  FileTextOutlined,
   CheckCircleOutlined, 
   CloseCircleOutlined,
   EyeOutlined,
-  EditOutlined,
-  DeleteOutlined,
   DownloadOutlined,
-  MoreOutlined,
   ClockCircleOutlined,
   UserOutlined,
-  CalendarOutlined
+  CalendarOutlined,
+  EditOutlined,
+  FileTextOutlined
 } from '@ant-design/icons';
-import type { ColumnsType } from 'antd/es/table';
-import dayjs from "@/utils/dayjs";
+import dayjs from 'dayjs';
+import TimesheetTable from '../TimesheetTable/TimesheetTable';
+import TimesheetApproval from '../TimesheetApproval/TimesheetApproval';
+import TimesheetDetail from '../TimesheetDetail/TimesheetDetail';
+import { Timesheet, TimeEntry } from '@/types';
 import styles from './TimesheetManagementContent.module.css';
-
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
-
-interface TimesheetType {
-  key: string;
-  id: string;
-  userId: string;
-  userName: string;
-  userEmail: string;
-  weekStart: string;
-  weekEnd: string;
-  totalHours: number;
-  targetHours: number;
-  project: string;
-  status: 'pending' | 'approved' | 'rejected' | 'draft';
-  submittedDate: string;
-  approvedBy?: string;
-  approvedDate?: string;
-  notes?: string;
-}
+const { TabPane } = Tabs;
 
 const TimesheetManagementContent: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [projectFilter, setProjectFilter] = useState<string>('all');
   const [dateRange, setDateRange] = useState<any>(null);
-  const [selectedRows, setSelectedRows] = useState<TimesheetType[]>([]);
+  const [selectedRows, setSelectedRows] = useState<Timesheet[]>([]);
   const [viewModalOpen, setViewModalOpen] = useState(false);
-  const [selectedTimesheet, setSelectedTimesheet] = useState<TimesheetType | null>(null);
+  const [selectedTimesheet, setSelectedTimesheet] = useState<Timesheet | null>(null);
+  const [activeTab, setActiveTab] = useState('all');
 
-  // Dummy data
-  const dummyTimesheets: TimesheetType[] = [
+  // Enhanced dummy data with TimeEntry[]
+  const dummyTimesheets: Timesheet[] = [
     {
-      key: '1',
       id: 'TS-001',
       userId: 'USR-001',
       userName: 'John Doe',
       userEmail: 'john@company.com',
-      weekStart: '2024-01-08',
-      weekEnd: '2024-01-12',
+      weekStart: new Date('2024-01-08'),
+      weekEnd: new Date('2024-01-12'),
       totalHours: 42,
       targetHours: 40,
       project: 'Project Alpha',
+      department: 'Engineering',
       status: 'approved',
-      submittedDate: '2024-01-12 16:30',
+      submittedDate: '2024-01-12T16:30:00',
       approvedBy: 'Admin User',
-      approvedDate: '2024-01-13 10:15',
+      approvedDate: '2024-01-13T10:15:00',
+      entries: [
+        {
+          id: 'TE-001',
+          userId: 'USR-001',
+          date: new Date('2024-01-08'),
+          hours: 8,
+          type: 'work',
+          project: 'Project Alpha',
+          description: 'Developed new feature',
+          status: 'approved',
+        },
+        {
+          id: 'TE-002',
+          userId: 'USR-001',
+          date: new Date('2024-01-09'),
+          hours: 8,
+          type: 'work',
+          project: 'Project Alpha',
+          description: 'Code review and testing',
+          status: 'approved',
+        },
+        {
+          id: 'TE-003',
+          userId: 'USR-001',
+          date: new Date('2024-01-10'),
+          hours: 8,
+          type: 'meeting',
+          project: 'Project Alpha',
+          description: 'Team planning meeting',
+          status: 'approved',
+        },
+        {
+          id: 'TE-004',
+          userId: 'USR-001',
+          date: new Date('2024-01-11'),
+          hours: 9,
+          type: 'work',
+          project: 'Project Alpha',
+          description: 'Bug fixes and deployment',
+          status: 'approved',
+        },
+        {
+          id: 'TE-005',
+          userId: 'USR-001',
+          date: new Date('2024-01-12'),
+          hours: 9,
+          type: 'work',
+          project: 'Project Alpha',
+          description: 'Documentation and cleanup',
+          status: 'approved',
+        },
+      ],
     },
     {
-      key: '2',
       id: 'TS-002',
       userId: 'USR-002',
       userName: 'Jane Smith',
       userEmail: 'jane@company.com',
-      weekStart: '2024-01-08',
-      weekEnd: '2024-01-12',
+      weekStart: new Date('2024-01-08'),
+      weekEnd: new Date('2024-01-12'),
       totalHours: 38,
       targetHours: 40,
       project: 'Project Beta',
-      status: 'pending',
-      submittedDate: '2024-01-12 17:45',
+      department: 'Marketing',
+      status: 'submitted',
+      submittedDate: '2024-01-12T17:45:00',
+      entries: [
+        {
+          id: 'TE-006',
+          userId: 'USR-002',
+          date: new Date('2024-01-08'),
+          hours: 8,
+          type: 'work',
+          project: 'Project Beta',
+          description: 'Marketing campaign planning',
+          status: 'approved',
+        },
+        {
+          id: 'TE-007',
+          userId: 'USR-002',
+          date: new Date('2024-01-09'),
+          hours: 8,
+          type: 'work',
+          project: 'Project Beta',
+          description: 'Content creation',
+          status: 'approved',
+        },
+        {
+          id: 'TE-008',
+          userId: 'USR-002',
+          date: new Date('2024-01-10'),
+          hours: 8,
+          type: 'leave',
+          description: 'Sick leave',
+          status: 'approved',
+        },
+        {
+          id: 'TE-009',
+          userId: 'USR-002',
+          date: new Date('2024-01-11'),
+          hours: 7,
+          type: 'work',
+          project: 'Project Beta',
+          description: 'Social media management',
+          status: 'approved',
+        },
+        {
+          id: 'TE-010',
+          userId: 'USR-002',
+          date: new Date('2024-01-12'),
+          hours: 7,
+          type: 'meeting',
+          project: 'Project Beta',
+          description: 'Client presentation',
+          status: 'approved',
+        },
+      ],
     },
-    {
-      key: '3',
-      id: 'TS-003',
-      userId: 'USR-003',
-      userName: 'Robert Johnson',
-      userEmail: 'robert@company.com',
-      weekStart: '2024-01-08',
-      weekEnd: '2024-01-12',
-      totalHours: 40,
-      targetHours: 40,
-      project: 'Project Gamma',
-      status: 'approved',
-      submittedDate: '2024-01-12 15:20',
-      approvedBy: 'Admin User',
-      approvedDate: '2024-01-13 09:45',
-    },
-    {
-      key: '4',
-      id: 'TS-004',
-      userId: 'USR-004',
-      userName: 'Sarah Williams',
-      userEmail: 'sarah@company.com',
-      weekStart: '2024-01-01',
-      weekEnd: '2024-01-05',
-      totalHours: 32,
-      targetHours: 40,
-      project: 'Project Alpha',
-      status: 'rejected',
-      submittedDate: '2024-01-05 14:10',
-      notes: 'Missing time entries for Wednesday',
-    },
-    {
-      key: '5',
-      id: 'TS-005',
-      userId: 'USR-005',
-      userName: 'Michael Brown',
-      userEmail: 'michael@company.com',
-      weekStart: '2024-01-01',
-      weekEnd: '2024-01-05',
-      totalHours: 45,
-      targetHours: 40,
-      project: 'Project Delta',
-      status: 'draft',
-      submittedDate: '2024-01-04 11:30',
-    },
+    // Add more dummy timesheets as needed...
   ];
 
   const projects = ['Project Alpha', 'Project Beta', 'Project Gamma', 'Project Delta', 'Project Epsilon'];
 
-  const statusColors = {
-    pending: 'gold',
-    approved: 'green',
-    rejected: 'red',
-    draft: 'blue',
-  };
-
-  const statusIcons = {
-    pending: <ClockCircleOutlined />,
-    approved: <CheckCircleOutlined />,
-    rejected: <CloseCircleOutlined />,
-    draft: <EditOutlined />,
-  };
-
-  const columns: ColumnsType<TimesheetType> = [
-    {
-      title: 'Timesheet ID',
-      dataIndex: 'id',
-      key: 'id',
-      width: 120,
-    },
-    {
-      title: 'User',
-      dataIndex: 'userName',
-      key: 'userName',
-      render: (text, record) => (
-        <div className={styles.userCell}>
-          <div className={styles.userAvatar}>
-            {record.userName.charAt(0)}
-          </div>
-          <div>
-            <div className={styles.userName}>{text}</div>
-            <div className={styles.userEmail}>{record.userEmail}</div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: 'Week',
-      dataIndex: 'weekStart',
-      key: 'week',
-      width: 200,
-      render: (_, record) => (
-        <div className={styles.weekCell}>
-          <CalendarOutlined style={{ marginRight: 8 }} />
-          {dayjs(record.weekStart).format('MMM DD')} - {dayjs(record.weekEnd).format('MMM DD, YYYY')}
-        </div>
-      ),
-    },
-    {
-      title: 'Project',
-      dataIndex: 'project',
-      key: 'project',
-      width: 150,
-    },
-    {
-      title: 'Hours',
-      dataIndex: 'totalHours',
-      key: 'totalHours',
-      width: 180,
-      render: (hours, record) => (
-        <div className={styles.hoursCell}>
-          <div className={styles.hoursInfo}>
-            <span className={styles.hoursValue}>{hours}</span>
-            <span className={styles.hoursTarget}>/ {record.targetHours} hrs</span>
-          </div>
-          <Progress 
-            percent={Math.min((hours / record.targetHours) * 100, 100)} 
-            size="small" 
-            strokeColor={hours >= record.targetHours ? '#52c41a' : '#1890ff'}
-            showInfo={false}
-          />
-          {hours > record.targetHours && (
-            <Tag color="orange" style={{ marginTop: 4, fontSize: 10 }}>
-              +{hours - record.targetHours} overtime
-            </Tag>
-          )}
-        </div>
-      ),
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      width: 120,
-      render: (status: string) => (
-        <Tag 
-          icon={statusIcons[status as keyof typeof statusIcons]} 
-          color={statusColors[status as keyof typeof statusColors]}
-          style={{ textTransform: 'capitalize' }}
-        >
-          {status}
-        </Tag>
-      ),
-    },
-    {
-      title: 'Submitted',
-      dataIndex: 'submittedDate',
-      key: 'submittedDate',
-      width: 180,
-      render: (date: string) => dayjs(date).format('MMM DD, YYYY HH:mm'),
-    },
-    {
-      title: 'Actions',
-      key: 'actions',
-      width: 120,
-      render: (_, record) => (
-        <Space size="small">
-          <Tooltip title="View Details">
-            <Button 
-              type="text" 
-              icon={<EyeOutlined />} 
-              onClick={() => handleView(record)}
-            />
-          </Tooltip>
-          {record.status === 'pending' && (
-            <>
-              <Tooltip title="Approve">
-                <Button 
-                  type="text" 
-                  icon={<CheckCircleOutlined />} 
-                  style={{ color: '#52c41a' }}
-                  onClick={() => handleApprove(record.id)}
-                />
-              </Tooltip>
-              <Tooltip title="Reject">
-                <Button 
-                  type="text" 
-                  icon={<CloseCircleOutlined />} 
-                  style={{ color: '#ff4d4f' }}
-                  onClick={() => handleReject(record.id)}
-                />
-              </Tooltip>
-            </>
-          )}
-          <Dropdown
-            menu={{
-              items: [
-                {
-                  key: 'edit',
-                  label: 'Edit',
-                  icon: <EditOutlined />,
-                  disabled: record.status === 'approved',
-                },
-                {
-                  key: 'delete',
-                  label: 'Delete',
-                  icon: <DeleteOutlined />,
-                  danger: true,
-                },
-              ],
-            }}
-          >
-            <Button type="text" icon={<MoreOutlined />} />
-          </Dropdown>
-        </Space>
-      ),
-    },
-  ];
-
+  // Filter timesheets based on active tab
   const filteredTimesheets = dummyTimesheets.filter(timesheet => {
     const matchesSearch = 
-      timesheet.userName.toLowerCase().includes(searchText.toLowerCase()) ||
-      timesheet.userEmail.toLowerCase().includes(searchText.toLowerCase()) ||
-      timesheet.project.toLowerCase().includes(searchText.toLowerCase());
+      timesheet.userName?.toLowerCase().includes(searchText.toLowerCase()) ||
+      timesheet.userEmail?.toLowerCase().includes(searchText.toLowerCase()) ||
+      timesheet.project?.toLowerCase().includes(searchText.toLowerCase());
     
     const matchesStatus = statusFilter === 'all' || timesheet.status === statusFilter;
     const matchesProject = projectFilter === 'all' || timesheet.project === projectFilter;
@@ -327,41 +210,73 @@ const TimesheetManagementContent: React.FC = () => {
       matchesDate = timesheetDate.isBetween(startDate, endDate, null, '[]');
     }
     
-    return matchesSearch && matchesStatus && matchesProject && matchesDate;
+    // Filter by tab
+    const matchesTab = activeTab === 'all' || 
+                      (activeTab === 'pending' && timesheet.status === 'submitted') ||
+                      (activeTab === 'approved' && timesheet.status === 'approved') ||
+                      (activeTab === 'rejected' && timesheet.status === 'rejected') ||
+                      (activeTab === 'draft' && timesheet.status === 'draft');
+    
+    return matchesSearch && matchesStatus && matchesProject && matchesDate && matchesTab;
   });
 
+  // Get pending timesheets for the approval component
+  const pendingTimesheets = dummyTimesheets.filter(t => t.status === 'submitted');
+
   const stats = {
-    total: filteredTimesheets.length,
-    pending: filteredTimesheets.filter(t => t.status === 'pending').length,
-    approved: filteredTimesheets.filter(t => t.status === 'approved').length,
-    rejected: filteredTimesheets.filter(t => t.status === 'rejected').length,
+    total: dummyTimesheets.length,
+    pending: dummyTimesheets.filter(t => t.status === 'submitted').length,
+    approved: dummyTimesheets.filter(t => t.status === 'approved').length,
+    rejected: dummyTimesheets.filter(t => t.status === 'rejected').length,
+    draft: dummyTimesheets.filter(t => t.status === 'draft').length,
   };
 
-  const handleView = (timesheet: TimesheetType) => {
+  // Handler functions
+  const handleView = (timesheet: Timesheet) => {
     setSelectedTimesheet(timesheet);
     setViewModalOpen(true);
   };
 
-  const handleApprove = (timesheetId: string) => {
+  const handleApprove = (timesheetId: string, notes?: string) => {
     Modal.confirm({
       title: 'Approve Timesheet',
-      content: 'Are you sure you want to approve this timesheet?',
+      content: notes ? `Approve with notes: ${notes}` : 'Are you sure you want to approve this timesheet?',
       okText: 'Approve',
       okType: 'primary',
       onOk: () => {
         message.success(`Timesheet ${timesheetId} approved successfully`);
+        // In real app, update the timesheet status here
       },
     });
   };
 
-  const handleReject = (timesheetId: string) => {
+  const handleReject = (timesheetId: string, notes?: string) => {
     Modal.confirm({
       title: 'Reject Timesheet',
-      content: 'Are you sure you want to reject this timesheet?',
+      content: notes ? `Reject with reason: ${notes}` : 'Are you sure you want to reject this timesheet?',
       okText: 'Reject',
       okType: 'danger',
       onOk: () => {
         message.success(`Timesheet ${timesheetId} rejected`);
+        // In real app, update the timesheet status here
+      },
+    });
+  };
+
+  const handleEdit = (timesheet: Timesheet) => {
+    message.info(`Edit timesheet ${timesheet.id}`);
+    // In real app, navigate to edit page or open edit modal
+  };
+
+  const handleDelete = (timesheetId: string) => {
+    Modal.confirm({
+      title: 'Delete Timesheet',
+      content: 'Are you sure you want to delete this timesheet? This action cannot be undone.',
+      okText: 'Delete',
+      okType: 'danger',
+      onOk: () => {
+        message.success(`Timesheet ${timesheetId} deleted successfully`);
+        // In real app, delete the timesheet here
       },
     });
   };
@@ -386,6 +301,15 @@ const TimesheetManagementContent: React.FC = () => {
 
   const handleExport = () => {
     message.success('Timesheets exported successfully');
+  };
+
+  const handleSelectRows = (selectedRowKeys: React.Key[], selectedRows: Timesheet[]) => {
+    setSelectedRows(selectedRows);
+  };
+
+  const handleDownload = (timesheet: Timesheet) => {
+    message.success(`Downloading timesheet ${timesheet.id}`);
+    // In real app, trigger PDF download
   };
 
   return (
@@ -414,7 +338,7 @@ const TimesheetManagementContent: React.FC = () => {
 
       {/* Stats Cards */}
       <Row gutter={[16, 16]} className={styles.statsRow}>
-        <Col xs={24} sm={12} md={6}>
+        <Col xs={24} sm={12} md={4.8}>
           <Card className={styles.statCard}>
             <div className={styles.statContent}>
               <div className={styles.statIcon} style={{ backgroundColor: '#1890ff15' }}>
@@ -427,7 +351,7 @@ const TimesheetManagementContent: React.FC = () => {
             </div>
           </Card>
         </Col>
-        <Col xs={24} sm={12} md={6}>
+        <Col xs={24} sm={12} md={4.8}>
           <Card className={styles.statCard}>
             <div className={styles.statContent}>
               <div className={styles.statIcon} style={{ backgroundColor: '#faad1415' }}>
@@ -440,7 +364,7 @@ const TimesheetManagementContent: React.FC = () => {
             </div>
           </Card>
         </Col>
-        <Col xs={24} sm={12} md={6}>
+        <Col xs={24} sm={12} md={4.8}>
           <Card className={styles.statCard}>
             <div className={styles.statContent}>
               <div className={styles.statIcon} style={{ backgroundColor: '#52c41a15' }}>
@@ -453,7 +377,7 @@ const TimesheetManagementContent: React.FC = () => {
             </div>
           </Card>
         </Col>
-        <Col xs={24} sm={12} md={6}>
+        <Col xs={24} sm={12} md={4.8}>
           <Card className={styles.statCard}>
             <div className={styles.statContent}>
               <div className={styles.statIcon} style={{ backgroundColor: '#ff4d4f15' }}>
@@ -466,188 +390,183 @@ const TimesheetManagementContent: React.FC = () => {
             </div>
           </Card>
         </Col>
+        <Col xs={24} sm={12} md={4.8}>
+          <Card className={styles.statCard}>
+            <div className={styles.statContent}>
+              <div className={styles.statIcon} style={{ backgroundColor: '#722ed115' }}>
+                <EditOutlined style={{ color: '#722ed1' }} />
+              </div>
+              <div className={styles.statInfo}>
+                <div className={styles.statValue}>{stats.draft}</div>
+                <div className={styles.statLabel}>Draft</div>
+              </div>
+            </div>
+          </Card>
+        </Col>
       </Row>
 
-      {/* Filters */}
-      <Card className={styles.filterCard}>
-        <Row gutter={[16, 16]} align="middle">
-          <Col xs={24} sm={12} md={6}>
-            <Input
-              placeholder="Search timesheets..."
-              prefix={<SearchOutlined />}
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              allowClear
+      {/* Tabs for different views */}
+      <Card className={styles.tabsCard}>
+        <Tabs activeKey={activeTab} onChange={setActiveTab}>
+          <TabPane 
+            tab={
+              <span>
+                <FileTextOutlined />
+                All Timesheets
+              </span>
+            } 
+            key="all"
+          >
+            {/* Filters */}
+            <Card className={styles.filterCard}>
+              <Row gutter={[16, 16]} align="middle">
+                <Col xs={24} sm={12} md={6}>
+                  <Input
+                    placeholder="Search timesheets..."
+                    prefix={<SearchOutlined />}
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                    allowClear
+                  />
+                </Col>
+                <Col xs={12} sm={6} md={4}>
+                  <Select
+                    style={{ width: '100%' }}
+                    placeholder="Status"
+                    value={statusFilter}
+                    onChange={setStatusFilter}
+                    allowClear
+                  >
+                    <Option value="all">All Status</Option>
+                    <Option value="draft">Draft</Option>
+                    <Option value="submitted">Pending</Option>
+                    <Option value="approved">Approved</Option>
+                    <Option value="rejected">Rejected</Option>
+                  </Select>
+                </Col>
+                <Col xs={12} sm={6} md={4}>
+                  <Select
+                    style={{ width: '100%' }}
+                    placeholder="Project"
+                    value={projectFilter}
+                    onChange={setProjectFilter}
+                    allowClear
+                  >
+                    <Option value="all">All Projects</Option>
+                    {projects.map(project => (
+                      <Option key={project} value={project}>{project}</Option>
+                    ))}
+                  </Select>
+                </Col>
+                <Col xs={24} sm={12} md={8}>
+                  <RangePicker 
+                    style={{ width: '100%' }}
+                    placeholder={['Start Date', 'End Date']}
+                    value={dateRange}
+                    onChange={setDateRange}
+                  />
+                </Col>
+                <Col xs={24} sm={12} md={2}>
+                  <Space style={{ float: 'right' }}>
+                    <Button onClick={() => {
+                      setSearchText('');
+                      setStatusFilter('all');
+                      setProjectFilter('all');
+                      setDateRange(null);
+                    }}>
+                      Reset
+                    </Button>
+                  </Space>
+                </Col>
+              </Row>
+            </Card>
+
+            {/* Timesheet Table */}
+            <div className={styles.tableSection}>
+              <TimesheetTable
+                data={filteredTimesheets}
+                onApprove={handleApprove}
+                onReject={handleReject}
+                onView={handleView}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onSelectRows={handleSelectRows}
+                pagination={{
+                  pageSize: 10,
+                  showSizeChanger: true,
+                  showQuickJumper: true,
+                  showTotal: (total) => `Total ${total} timesheets`,
+                }}
+              />
+            </div>
+          </TabPane>
+
+          <TabPane 
+            tab={
+              <span>
+                <ClockCircleOutlined />
+                Pending Approvals
+                {pendingTimesheets.length > 0 && (
+                  <Badge 
+                    count={pendingTimesheets.length} 
+                    style={{ marginLeft: 8 }}
+                  />
+                )}
+              </span>
+            } 
+            key="pending"
+          >
+            <TimesheetApproval
+              pendingTimesheets={pendingTimesheets}
+              onApprove={handleApprove}
+              onReject={handleReject}
+              onView={handleView}
             />
-          </Col>
-          <Col xs={12} sm={6} md={4}>
-            <Select
-              style={{ width: '100%' }}
-              placeholder="Status"
-              value={statusFilter}
-              onChange={setStatusFilter}
-              allowClear
-            >
-              <Option value="all">All Status</Option>
-              <Option value="pending">Pending</Option>
-              <Option value="approved">Approved</Option>
-              <Option value="rejected">Rejected</Option>
-              <Option value="draft">Draft</Option>
-            </Select>
-          </Col>
-          <Col xs={12} sm={6} md={4}>
-            <Select
-              style={{ width: '100%' }}
-              placeholder="Project"
-              value={projectFilter}
-              onChange={setProjectFilter}
-              allowClear
-            >
-              <Option value="all">All Projects</Option>
-              {projects.map(project => (
-                <Option key={project} value={project}>{project}</Option>
-              ))}
-            </Select>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <RangePicker 
-              style={{ width: '100%' }}
-              placeholder={['Start Date', 'End Date']}
-              value={dateRange}
-              onChange={setDateRange}
-            />
-          </Col>
-          <Col xs={24} sm={12} md={2}>
-            <Space style={{ float: 'right' }}>
-              <Button onClick={() => {
-                setSearchText('');
-                setStatusFilter('all');
-                setProjectFilter('all');
-                setDateRange(null);
-              }}>
-                Reset
-              </Button>
-            </Space>
-          </Col>
-        </Row>
+          </TabPane>
+
+          <TabPane 
+            tab={
+              <span>
+                <CheckCircleOutlined />
+                Approved
+              </span>
+            } 
+            key="approved"
+          >
+            <div className={styles.tableSection}>
+              <TimesheetTable
+                data={filteredTimesheets.filter(t => t.status === 'approved')}
+                onView={handleView}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                pagination={{
+                  pageSize: 10,
+                  showSizeChanger: true,
+                  showQuickJumper: true,
+                }}
+              />
+            </div>
+          </TabPane>
+        </Tabs>
       </Card>
 
-      {/* Timesheets Table */}
-      <Card className={styles.tableCard}>
-        <Table
-          columns={columns}
-          dataSource={filteredTimesheets}
-          rowSelection={{
-            selectedRowKeys: selectedRows.map(row => row.key),
-            onChange: (_, selectedRows) => setSelectedRows(selectedRows),
-          }}
-          pagination={{
-            pageSize: 10,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total) => `Total ${total} timesheets`,
-          }}
-          scroll={{ x: 1300 }}
-        />
-      </Card>
-
-      {/* View Timesheet Modal */}
+      {/* Timesheet Detail Modal */}
       <Modal
         title="Timesheet Details"
         open={viewModalOpen}
         onCancel={() => setViewModalOpen(false)}
-        footer={[
-          <Button key="close" onClick={() => setViewModalOpen(false)}>
-            Close
-          </Button>,
-          selectedTimesheet?.status === 'pending' && (
-            <Button key="approve" type="primary" onClick={() => handleApprove(selectedTimesheet?.id || '')}>
-              Approve
-            </Button>
-          ),
-        ]}
-        width={800}
+        footer={null}
+        width={1000}
+        className={styles.detailModal}
       >
         {selectedTimesheet && (
-          <div className={styles.timesheetDetail}>
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <div className={styles.detailItem}>
-                  <label>Timesheet ID:</label>
-                  <span>{selectedTimesheet.id}</span>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className={styles.detailItem}>
-                  <label>Status:</label>
-                  <Tag 
-                    icon={statusIcons[selectedTimesheet.status]} 
-                    color={statusColors[selectedTimesheet.status]}
-                  >
-                    {selectedTimesheet.status.toUpperCase()}
-                  </Tag>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className={styles.detailItem}>
-                  <label>User:</label>
-                  <span>{selectedTimesheet.userName}</span>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className={styles.detailItem}>
-                  <label>Project:</label>
-                  <span>{selectedTimesheet.project}</span>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className={styles.detailItem}>
-                  <label>Week:</label>
-                  <span>
-                    {dayjs(selectedTimesheet.weekStart).format('MMM DD')} - {dayjs(selectedTimesheet.weekEnd).format('MMM DD, YYYY')}
-                  </span>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className={styles.detailItem}>
-                  <label>Hours:</label>
-                  <span>
-                    <strong>{selectedTimesheet.totalHours}</strong> / {selectedTimesheet.targetHours} hours
-                  </span>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className={styles.detailItem}>
-                  <label>Submitted:</label>
-                  <span>{dayjs(selectedTimesheet.submittedDate).format('MMM DD, YYYY HH:mm')}</span>
-                </div>
-              </Col>
-              {selectedTimesheet.approvedBy && (
-                <Col span={12}>
-                  <div className={styles.detailItem}>
-                    <label>Approved By:</label>
-                    <span>{selectedTimesheet.approvedBy}</span>
-                  </div>
-                </Col>
-              )}
-              {selectedTimesheet.approvedDate && (
-                <Col span={12}>
-                  <div className={styles.detailItem}>
-                    <label>Approved Date:</label>
-                    <span>{dayjs(selectedTimesheet.approvedDate).format('MMM DD, YYYY HH:mm')}</span>
-                  </div>
-                </Col>
-              )}
-              {selectedTimesheet.notes && (
-                <Col span={24}>
-                  <div className={styles.detailItem}>
-                    <label>Notes:</label>
-                    <div className={styles.notes}>{selectedTimesheet.notes}</div>
-                  </div>
-                </Col>
-              )}
-            </Row>
-          </div>
+          <TimesheetDetail
+            timesheet={selectedTimesheet}
+            onEdit={handleEdit}
+            onApprove={handleApprove}
+            onReject={handleReject}
+            onDownload={handleDownload}
+          />
         )}
       </Modal>
     </div>

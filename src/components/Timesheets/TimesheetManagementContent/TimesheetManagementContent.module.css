@@ -193,7 +193,91 @@
   font-size: 14px;
 }
 
+/* Add these to the existing TimesheetManagementContent.module.css */
+
+.tabsCard {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 
+              0 3px 6px 0 rgba(0, 0, 0, 0.12), 
+              0 5px 12px 4px rgba(0, 0, 0, 0.09);
+  margin-top: 24px;
+}
+
+.tableSection {
+  margin-top: 24px;
+}
+
+.detailModal :global(.ant-modal-body) {
+  padding: 0;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Update stats row for 5 cards */
+.statsRow .ant-col {
+  padding: 8px;
+}
+
+.statCard {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 
+              0 3px 6px 0 rgba(0, 0, 0, 0.12), 
+              0 5px 12px 4px rgba(0, 0, 0, 0.09);
+  transition: all 0.3s;
+  height: 100%;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px -8px rgba(0, 0, 0, 0.08), 
+              0 9px 28px 0 rgba(0, 0, 0, 0.05), 
+              0 12px 48px 16px rgba(0, 0, 0, 0.03);
+}
+
+.statContent {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.statIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.statInfo {
+  flex: 1;
+}
+
+.statValue {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.statLabel {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.45);
+  margin-top: 4px;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
+  .statsRow .ant-col {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+  
+  .statCard {
+    margin-bottom: 16px;
+  }
+  
   .header {
     flex-direction: column;
   }
@@ -202,7 +286,7 @@
     width: 100%;
     justify-content: flex-start;
   }
-  
+
   .userCell {
     flex-direction: column;
     align-items: flex-start;
