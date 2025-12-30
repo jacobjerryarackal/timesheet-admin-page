@@ -266,7 +266,6 @@ const UserManagementContent: React.FC = () => {
           onView={handleView}
           onDelete={handleDelete}
           onSelectRows={handleSelectRows}
-          scroll={{ x: 1500, y: 500 }}
           pagination={{
             pageSize: 10,
             showSizeChanger: true,
