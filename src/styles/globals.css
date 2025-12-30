@@ -10,9 +10,15 @@ body {
   height: 100%;
   width: 100%;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5715;
+  background-color: #f0f2f5;
+  color: rgba(0, 0, 0, 0.85);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-#root {
+#__next {
   height: 100%;
 }
 
@@ -28,12 +34,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #c1c1c1;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #a8a8a8;
 }
 
 /* Utility classes */
@@ -59,4 +65,23 @@ body {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Print styles */
+@media print {
+  .ant-layout-sider {
+    display: none !important;
+  }
+  
+  .ant-layout-header {
+    display: none !important;
+  }
+  
+  .ant-layout-footer {
+    display: none !important;
+  }
 }
