@@ -1,0 +1,22 @@
+.breadcrumbContainer {
+  margin-bottom: 16px;
+  padding: 8px 0;
+}
+
+.breadcrumbContainer .ant-breadcrumb {
+  font-size: 14px;
+}
+
+.breadcrumbContainer .ant-breadcrumb a {
+  color: rgba(0, 0, 0, 0.45);
+  transition: color 0.3s;
+}
+
+.breadcrumbContainer .ant-breadcrumb a:hover {
+  color: #1890ff;
+}
+
+.breadcrumbContainer .ant-breadcrumb li:last-child a {
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+}
