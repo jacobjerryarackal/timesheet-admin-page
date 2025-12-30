@@ -106,36 +106,6 @@ const SettingsContent: React.FC = () => {
       });
   };
 
-  const holidayColumns = [
-    {
-      title: 'Date',
-      dataIndex: 'date',
-      key: 'date',
-      width: 150,
-      render: (date: string) => dayjs(date).format('MMM DD, YYYY'),
-    },
-    {
-      title: 'Holiday Name',
-      dataIndex: 'name',
-      key: 'name',
-      width: 200,
-    },
-    {
-      title: 'Type',
-      dataIndex: 'type',
-      key: 'type',
-      width: 120,
-      render: (type: string) => (
-        <Tag color={type === 'public' ? 'blue' : 'green'}>{type.toUpperCase()}</Tag>
-      ),
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-    },
-  ];
-
   const holidayData = [
     {
       key: '1',
@@ -277,7 +247,7 @@ const SettingsContent: React.FC = () => {
                 </Form.Item>
               </Col>
               <Col xs={24}>
-                <Divider orientation="left">Timesheet Policies</Divider>
+                <div className={styles.sectionHeader}>Timesheet Policies</div>
               </Col>
               <Col xs={24}>
                 <Form.Item
@@ -329,7 +299,7 @@ const SettingsContent: React.FC = () => {
           <Card title="Notification Settings">
             <Row gutter={[24, 16]}>
               <Col xs={24}>
-                <Divider orientation="left">Email Notifications</Divider>
+                <div className={styles.sectionHeader}>Email Notifications</div>
               </Col>
               <Col xs={24}>
                 <Form.Item
@@ -361,7 +331,7 @@ const SettingsContent: React.FC = () => {
                 </Form.Item>
               </Col>
               <Col xs={24}>
-                <Divider orientation="left">Push Notifications</Divider>
+                <div className={styles.sectionHeader}>Push Notifications</div>
               </Col>
               <Col xs={24}>
                 <Form.Item
@@ -383,7 +353,7 @@ const SettingsContent: React.FC = () => {
                 </Form.Item>
               </Col>
               <Col xs={24}>
-                <Divider orientation="left">Admin Notifications</Divider>
+                <div className={styles.sectionHeader}>Admin Notifications</div>
               </Col>
               <Col xs={24}>
                 <Form.Item
@@ -441,7 +411,7 @@ const SettingsContent: React.FC = () => {
                 </Form.Item>
               </Col>
               <Col xs={24}>
-                <Divider orientation="left">Password Policy</Divider>
+                <div className={styles.sectionHeader}>Password Policy</div>
               </Col>
               <Col xs={24}>
                 <Form.Item
@@ -487,7 +457,7 @@ const SettingsContent: React.FC = () => {
                 </Form.Item>
               </Col>
               <Col xs={24}>
-                <Divider orientation="left">Two-Factor Authentication</Divider>
+                <div className={styles.sectionHeader}>Two-Factor Authentication</div>
               </Col>
               <Col xs={24}>
                 <Form.Item
@@ -531,7 +501,7 @@ const SettingsContent: React.FC = () => {
                 </div>
               </Col>
               <Col xs={24}>
-                <Divider orientation="left">Upcoming Holidays</Divider>
+                <div className={styles.sectionHeader}>Upcoming Holidays</div>
               </Col>
               <Col xs={24}>
                 <div className={styles.holidayList}>
@@ -558,7 +528,7 @@ const SettingsContent: React.FC = () => {
                 </div>
               </Col>
               <Col xs={24}>
-                <Divider orientation="left">Add New Holiday</Divider>
+                <div className={styles.sectionHeader}>Add New Holiday</div>
               </Col>
               <Col xs={24} md={8}>
                 <Form.Item

@@ -111,6 +111,15 @@
   gap: 16px;
 }
 
+.sectionHeader {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.85);
+  margin: 16px 0 8px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
 @media (max-width: 768px) {
   .holidayItem {
     flex-direction: column;
