@@ -5,19 +5,20 @@
   top: 0;
   bottom: 0;
   z-index: 1000;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
 }
 
 .logoSection {
-  height: 64px;
   padding: 16px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  overflow: hidden;
+  min-height: 64px;
+  transition: all 0.2s;
 }
 
 .logo {
@@ -26,29 +27,43 @@
   font-weight: 600;
   line-height: 1.2;
   text-align: center;
-  white-space: nowrap;
   transition: all 0.2s;
+  display: block;
+  width: 100%;
 }
 
 .logoCollapsed {
   font-size: 18px;
+  padding: 0;
 }
 
 .logoSubtitle {
   color: rgba(255, 255, 255, 0.65);
   font-size: 12px;
-  margin-top: 2px;
+  margin-top: 4px;
   text-align: center;
   white-space: nowrap;
+  transition: all 0.2s;
+  display: block;
+  width: 100%;
+  opacity: 1;
+  visibility: visible;
+}
+
+.sider-collapsed .logoSubtitle {
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  margin-top: 0;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .menu {
   border-right: none;
   padding: 16px 0;
   flex: 1;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .menu :global(.ant-menu-item) {
