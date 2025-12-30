@@ -5,7 +5,6 @@ import {
   Row, 
   Col, 
   Card, 
-  Table, 
   Button, 
   Input, 
   Select, 
@@ -19,7 +18,9 @@ import {
   Tooltip,
   Calendar,
   List,
-  Avatar
+  Avatar,
+  Drawer,
+  Form
 } from 'antd';
 import { 
   SearchOutlined, 
@@ -37,7 +38,7 @@ import {
   ClockCircleOutlined,
   HistoryOutlined
 } from '@ant-design/icons';
-import type { ColumnsType } from 'antd/es/table';
+import LeaveTable from '../LeaveTable/LeaveTable'; // Import the new LeaveTable component
 import dayjs from "@/utils/dayjs";
 import type { Dayjs } from 'dayjs';
 import styles from './LeaveManagementContent.module.css';
@@ -71,6 +72,9 @@ const LeaveManagementContent: React.FC = () => {
   const [calendarDate, setCalendarDate] = useState<Dayjs>(dayjs());
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [selectedLeave, setSelectedLeave] = useState<LeaveType | null>(null);
+  const [selectedRows, setSelectedRows] = useState<LeaveType[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   // Dummy data
   const dummyLeaves: LeaveType[] = [
@@ -149,6 +153,50 @@ const LeaveManagementContent: React.FC = () => {
       submittedDate: '2024-01-30 13:40',
       reason: 'Wedding ceremony',
     },
+    {
+      key: '6',
+      id: 'LV-006',
+      userId: 'USR-001',
+      userName: 'John Doe',
+      userEmail: 'john@company.com',
+      leaveType: 'sick',
+      startDate: '2024-02-10',
+      endDate: '2024-02-11',
+      totalDays: 2,
+      status: 'pending',
+      submittedDate: '2024-02-05 08:30',
+      reason: 'Flu symptoms',
+    },
+    {
+      key: '7',
+      id: 'LV-007',
+      userId: 'USR-002',
+      userName: 'Jane Smith',
+      userEmail: 'jane@company.com',
+      leaveType: 'vacation',
+      startDate: '2024-02-15',
+      endDate: '2024-02-20',
+      totalDays: 6,
+      status: 'approved',
+      submittedDate: '2024-01-30 10:20',
+      reason: 'Holiday trip',
+      approvedBy: 'Admin User',
+      approvedDate: '2024-01-31 14:45',
+    },
+    {
+      key: '8',
+      id: 'LV-008',
+      userId: 'USR-006',
+      userName: 'Emily Davis',
+      userEmail: 'emily@company.com',
+      leaveType: 'personal',
+      startDate: '2024-01-28',
+      endDate: '2024-01-29',
+      totalDays: 2,
+      status: 'cancelled',
+      submittedDate: '2024-01-25 11:10',
+      reason: 'Family emergency',
+    },
   ];
 
   const leaveTypeColors = {
@@ -163,7 +211,7 @@ const LeaveManagementContent: React.FC = () => {
     vacation: 'Vacation',
     sick: 'Sick Leave',
     personal: 'Personal',
-    birthday: 'Birthday Time',
+    birthday: 'Birthday',
     other: 'Other',
   };
 
@@ -181,134 +229,12 @@ const LeaveManagementContent: React.FC = () => {
     cancelled: <CloseCircleOutlined />,
   };
 
-  const columns: ColumnsType<LeaveType> = [
-    {
-      title: 'Leave ID',
-      dataIndex: 'id',
-      key: 'id',
-      width: 100,
-    },
-    {
-      title: 'User',
-      dataIndex: 'userName',
-      key: 'userName',
-      render: (text, record) => (
-        <div className={styles.userCell}>
-          <Avatar size="small" icon={<UserOutlined />} />
-          <div>
-            <div className={styles.userName}>{text}</div>
-            <div className={styles.userEmail}>{record.userEmail}</div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: 'Leave Type',
-      dataIndex: 'leaveType',
-      key: 'leaveType',
-      width: 120,
-      render: (type: string) => (
-        <Tag color={leaveTypeColors[type as keyof typeof leaveTypeColors]}>
-          {leaveTypeLabels[type as keyof typeof leaveTypeLabels]}
-        </Tag>
-      ),
-    },
-    {
-      title: 'Date Range',
-      dataIndex: 'startDate',
-      key: 'dateRange',
-      width: 200,
-      render: (_, record) => (
-        <div className={styles.dateCell}>
-          <CalendarOutlined style={{ marginRight: 8 }} />
-          {dayjs(record.startDate).format('MMM DD')} - {dayjs(record.endDate).format('MMM DD, YYYY')}
-        </div>
-      ),
-    },
-    {
-      title: 'Duration',
-      dataIndex: 'totalDays',
-      key: 'totalDays',
-      width: 100,
-      render: (days) => (
-        <div className={styles.durationCell}>
-          <span className={styles.durationValue}>{days}</span>
-          <span className={styles.durationLabel}>day{days > 1 ? 's' : ''}</span>
-        </div>
-      ),
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      width: 120,
-      render: (status: string) => (
-        <Tag 
-          icon={statusIcons[status as keyof typeof statusIcons]} 
-          color={statusColors[status as keyof typeof statusColors]}
-          style={{ textTransform: 'capitalize' }}
-        >
-          {status}
-        </Tag>
-      ),
-    },
-    {
-      title: 'Reason',
-      dataIndex: 'reason',
-      key: 'reason',
-      width: 200,
-      ellipsis: true,
-    },
-    {
-      title: 'Submitted',
-      dataIndex: 'submittedDate',
-      key: 'submittedDate',
-      width: 180,
-      render: (date: string) => dayjs(date).format('MMM DD, YYYY HH:mm'),
-    },
-    {
-      title: 'Actions',
-      key: 'actions',
-      width: 120,
-      render: (_, record) => (
-        <Space size="small">
-          <Tooltip title="View Details">
-            <Button 
-              type="text" 
-              icon={<EyeOutlined />} 
-              onClick={() => handleView(record)}
-            />
-          </Tooltip>
-          {record.status === 'pending' && (
-            <>
-              <Tooltip title="Approve">
-                <Button 
-                  type="text" 
-                  icon={<CheckCircleOutlined />} 
-                  style={{ color: '#52c41a' }}
-                  onClick={() => handleApprove(record.id)}
-                />
-              </Tooltip>
-              <Tooltip title="Reject">
-                <Button 
-                  type="text" 
-                  icon={<CloseCircleOutlined />} 
-                  style={{ color: '#ff4d4f' }}
-                  onClick={() => handleReject(record.id)}
-                />
-              </Tooltip>
-            </>
-          )}
-        </Space>
-      ),
-    },
-  ];
-
   const filteredLeaves = dummyLeaves.filter(leave => {
     const matchesSearch = 
       leave.userName.toLowerCase().includes(searchText.toLowerCase()) ||
       leave.userEmail.toLowerCase().includes(searchText.toLowerCase()) ||
-      leave.reason.toLowerCase().includes(searchText.toLowerCase());
+      leave.reason.toLowerCase().includes(searchText.toLowerCase()) ||
+      leave.id.toLowerCase().includes(searchText.toLowerCase());
     
     const matchesStatus = statusFilter === 'all' || leave.status === statusFilter;
     const matchesType = typeFilter === 'all' || leave.leaveType === typeFilter;
@@ -332,6 +258,7 @@ const LeaveManagementContent: React.FC = () => {
     pending: filteredLeaves.filter(l => l.status === 'pending').length,
     approved: filteredLeaves.filter(l => l.status === 'approved').length,
     rejected: filteredLeaves.filter(l => l.status === 'rejected').length,
+    cancelled: filteredLeaves.filter(l => l.status === 'cancelled').length,
   };
 
   // Calendar events
@@ -374,9 +301,16 @@ const LeaveManagementContent: React.FC = () => {
     );
   };
 
+  // Handlers for LeaveTable
   const handleView = (leave: LeaveType) => {
     setSelectedLeave(leave);
     setViewModalOpen(true);
+  };
+
+  const handleEdit = (leave: LeaveType) => {
+    message.info(`Editing leave ${leave.id}`);
+    // In real app, open edit form/drawer
+    setIsDrawerOpen(true);
   };
 
   const handleApprove = (leaveId: string) => {
@@ -387,6 +321,7 @@ const LeaveManagementContent: React.FC = () => {
       okType: 'primary',
       onOk: () => {
         message.success(`Leave request ${leaveId} approved successfully`);
+        // In real app, make API call to update status
       },
     });
   };
@@ -399,12 +334,94 @@ const LeaveManagementContent: React.FC = () => {
       okType: 'danger',
       onOk: () => {
         message.success(`Leave request ${leaveId} rejected`);
+        // In real app, make API call to update status
       },
     });
   };
 
+  const handleDelete = (leaveId: string) => {
+    Modal.confirm({
+      title: 'Delete Leave Request',
+      content: 'Are you sure you want to delete this leave request? This action cannot be undone.',
+      okText: 'Delete',
+      okType: 'danger',
+      cancelText: 'Cancel',
+      onOk: () => {
+        message.success(`Leave request ${leaveId} deleted successfully`);
+        // In real app, make API call to delete leave
+      },
+    });
+  };
+
+  const handleSelectRows = (selectedRowKeys: React.Key[], selectedRows: LeaveType[]) => {
+    setSelectedRows(selectedRows);
+  };
+
   const handleAddLeave = () => {
     message.info('Add new leave request');
+    setIsDrawerOpen(true);
+  };
+
+  const handleExport = () => {
+    message.success('Leave data exported successfully');
+  };
+
+  // Bulk actions
+  const handleBulkApprove = () => {
+    if (selectedRows.length === 0) {
+      message.warning('Please select leave requests to approve');
+      return;
+    }
+    
+    Modal.confirm({
+      title: `Approve ${selectedRows.length} Leave Requests`,
+      content: 'Are you sure you want to approve all selected leave requests?',
+      okText: 'Approve All',
+      okType: 'primary',
+      onOk: () => {
+        message.success(`${selectedRows.length} leave requests approved successfully`);
+        setSelectedRows([]);
+        // In real app, make API call to update status for all selected
+      },
+    });
+  };
+
+  const handleBulkReject = () => {
+    if (selectedRows.length === 0) {
+      message.warning('Please select leave requests to reject');
+      return;
+    }
+    
+    Modal.confirm({
+      title: `Reject ${selectedRows.length} Leave Requests`,
+      content: 'Are you sure you want to reject all selected leave requests?',
+      okText: 'Reject All',
+      okType: 'danger',
+      onOk: () => {
+        message.success(`${selectedRows.length} leave requests rejected`);
+        setSelectedRows([]);
+        // In real app, make API call to update status for all selected
+      },
+    });
+  };
+
+  const handleBulkDelete = () => {
+    if (selectedRows.length === 0) {
+      message.warning('Please select leave requests to delete');
+      return;
+    }
+    
+    Modal.confirm({
+      title: `Delete ${selectedRows.length} Leave Requests`,
+      content: 'Are you sure you want to delete all selected leave requests? This action cannot be undone.',
+      okText: 'Delete All',
+      okType: 'danger',
+      onOk: () => {
+        message.success(`${selectedRows.length} leave requests deleted successfully`);
+        setSelectedRows([]);
+        // In real app, make API call to delete all selected
+      },
+    });
   };
 
   return (
@@ -416,7 +433,35 @@ const LeaveManagementContent: React.FC = () => {
         </div>
         <div className={styles.headerRight}>
           <Space>
-            <Button icon={<DownloadOutlined />}>
+            {selectedRows.length > 0 && (
+              <>
+                <Button 
+                  type="primary"
+                  icon={<CheckCircleOutlined />}
+                  onClick={handleBulkApprove}
+                >
+                  Approve ({selectedRows.length})
+                </Button>
+                <Button 
+                  danger
+                  icon={<CloseCircleOutlined />}
+                  onClick={handleBulkReject}
+                >
+                  Reject ({selectedRows.length})
+                </Button>
+                <Button 
+                  danger
+                  icon={<DeleteOutlined />}
+                  onClick={handleBulkDelete}
+                >
+                  Delete ({selectedRows.length})
+                </Button>
+              </>
+            )}
+            <Button 
+              icon={<DownloadOutlined />}
+              onClick={handleExport}
+            >
               Export
             </Button>
             <Button 
@@ -478,8 +523,8 @@ const LeaveManagementContent: React.FC = () => {
                 <CloseCircleOutlined style={{ color: '#ff4d4f' }} />
               </div>
               <div className={styles.statInfo}>
-                <div className={styles.statValue}>{stats.rejected}</div>
-                <div className={styles.statLabel}>Rejected</div>
+                <div className={styles.statValue}>{stats.rejected + stats.cancelled}</div>
+                <div className={styles.statLabel}>Rejected/Cancelled</div>
               </div>
             </div>
           </Card>
@@ -527,15 +572,17 @@ const LeaveManagementContent: React.FC = () => {
             <Row gutter={[16, 16]} align="middle">
               <Col xs={24}>
                 <Input
-                  placeholder="Search leave requests..."
+                  placeholder="Search by user name, email, reason, or ID..."
                   prefix={<SearchOutlined />}
                   value={searchText}
                   onChange={(e) => setSearchText(e.target.value)}
                   allowClear
+                  size="large"
                 />
               </Col>
               <Col xs={12} sm={8}>
                 <Select
+                  size="large"
                   style={{ width: '100%' }}
                   placeholder="Status"
                   value={statusFilter}
@@ -551,6 +598,7 @@ const LeaveManagementContent: React.FC = () => {
               </Col>
               <Col xs={12} sm={8}>
                 <Select
+                  size="large"
                   style={{ width: '100%' }}
                   placeholder="Leave Type"
                   value={typeFilter}
@@ -567,6 +615,7 @@ const LeaveManagementContent: React.FC = () => {
               </Col>
               <Col xs={24} sm={8}>
                 <RangePicker 
+                  size="large"
                   style={{ width: '100%' }}
                   placeholder={['Start Date', 'End Date']}
                   value={dateRange}
@@ -575,12 +624,15 @@ const LeaveManagementContent: React.FC = () => {
               </Col>
               <Col xs={24}>
                 <Space style={{ float: 'right' }}>
-                  <Button onClick={() => {
-                    setSearchText('');
-                    setStatusFilter('all');
-                    setTypeFilter('all');
-                    setDateRange(null);
-                  }}>
+                  <Button 
+                    size="large"
+                    onClick={() => {
+                      setSearchText('');
+                      setStatusFilter('all');
+                      setTypeFilter('all');
+                      setDateRange(null);
+                    }}
+                  >
                     Reset Filters
                   </Button>
                 </Space>
@@ -593,6 +645,7 @@ const LeaveManagementContent: React.FC = () => {
             <List
               dataSource={dummyLeaves
                 .filter(leave => leave.status === 'approved')
+                .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
                 .slice(0, 5)
               }
               renderItem={(leave) => (
@@ -600,7 +653,7 @@ const LeaveManagementContent: React.FC = () => {
                   <List.Item.Meta
                     avatar={<Avatar icon={<UserOutlined />} />}
                     title={leave.userName}
-                    description={`${leave.leaveType} • ${leave.totalDays} day${leave.totalDays > 1 ? 's' : ''}`}
+                    description={`${leaveTypeLabels[leave.leaveType]} • ${leave.totalDays} day${leave.totalDays > 1 ? 's' : ''}`}
                   />
                   <div className={styles.upcomingDate}>
                     {dayjs(leave.startDate).format('MMM DD')}
@@ -612,18 +665,24 @@ const LeaveManagementContent: React.FC = () => {
         </Col>
       </Row>
 
-      {/* Leave Requests Table */}
+      {/* Leave Requests Table - USING THE NEW LeaveTable COMPONENT */}
       <Card className={styles.tableCard} title="All Leave Requests">
-        <Table
-          columns={columns}
-          dataSource={filteredLeaves}
+        <LeaveTable
+          data={filteredLeaves}
+          loading={loading}
+          onView={handleView}
+          onEdit={handleEdit}
+          onApprove={handleApprove}
+          onReject={handleReject}
+          onDelete={handleDelete}
+          onSelectRows={handleSelectRows}
           pagination={{
             pageSize: 10,
             showSizeChanger: true,
             showQuickJumper: true,
             showTotal: (total) => `Total ${total} requests`,
+            position: ['bottomRight'],
           }}
-          scroll={{ x: 1200 }}
         />
       </Card>
 
@@ -641,14 +700,20 @@ const LeaveManagementContent: React.FC = () => {
               <Button 
                 key="reject" 
                 danger
-                onClick={() => handleReject(selectedLeave?.id || '')}
+                onClick={() => {
+                  handleReject(selectedLeave?.id || '');
+                  setViewModalOpen(false);
+                }}
               >
                 Reject
               </Button>
               <Button 
                 key="approve" 
                 type="primary"
-                onClick={() => handleApprove(selectedLeave?.id || '')}
+                onClick={() => {
+                  handleApprove(selectedLeave?.id || '');
+                  setViewModalOpen(false);
+                }}
               >
                 Approve
               </Button>
@@ -663,7 +728,7 @@ const LeaveManagementContent: React.FC = () => {
               <Col span={12}>
                 <div className={styles.detailItem}>
                   <label>Request ID:</label>
-                  <span>{selectedLeave.id}</span>
+                  <span className={styles.detailValue}>{selectedLeave.id}</span>
                 </div>
               </Col>
               <Col span={12}>
@@ -680,7 +745,10 @@ const LeaveManagementContent: React.FC = () => {
               <Col span={12}>
                 <div className={styles.detailItem}>
                   <label>User:</label>
-                  <span>{selectedLeave.userName}</span>
+                  <div className={styles.detailValue}>
+                    <div>{selectedLeave.userName}</div>
+                    <div className={styles.detailSubtext}>{selectedLeave.userEmail}</div>
+                  </div>
                 </div>
               </Col>
               <Col span={12}>
@@ -694,19 +762,23 @@ const LeaveManagementContent: React.FC = () => {
               <Col span={12}>
                 <div className={styles.detailItem}>
                   <label>Start Date:</label>
-                  <span>{dayjs(selectedLeave.startDate).format('MMM DD, YYYY')}</span>
+                  <span className={styles.detailValue}>
+                    {dayjs(selectedLeave.startDate).format('MMM DD, YYYY')}
+                  </span>
                 </div>
               </Col>
               <Col span={12}>
                 <div className={styles.detailItem}>
                   <label>End Date:</label>
-                  <span>{dayjs(selectedLeave.endDate).format('MMM DD, YYYY')}</span>
+                  <span className={styles.detailValue}>
+                    {dayjs(selectedLeave.endDate).format('MMM DD, YYYY')}
+                  </span>
                 </div>
               </Col>
               <Col span={12}>
                 <div className={styles.detailItem}>
                   <label>Duration:</label>
-                  <span>
+                  <span className={styles.detailValue}>
                     <strong>{selectedLeave.totalDays}</strong> day{selectedLeave.totalDays > 1 ? 's' : ''}
                   </span>
                 </div>
@@ -714,7 +786,9 @@ const LeaveManagementContent: React.FC = () => {
               <Col span={12}>
                 <div className={styles.detailItem}>
                   <label>Submitted:</label>
-                  <span>{dayjs(selectedLeave.submittedDate).format('MMM DD, YYYY HH:mm')}</span>
+                  <span className={styles.detailValue}>
+                    {dayjs(selectedLeave.submittedDate).format('MMM DD, YYYY HH:mm')}
+                  </span>
                 </div>
               </Col>
               <Col span={24}>
@@ -727,7 +801,7 @@ const LeaveManagementContent: React.FC = () => {
                 <Col span={12}>
                   <div className={styles.detailItem}>
                     <label>Approved By:</label>
-                    <span>{selectedLeave.approvedBy}</span>
+                    <span className={styles.detailValue}>{selectedLeave.approvedBy}</span>
                   </div>
                 </Col>
               )}
@@ -735,7 +809,9 @@ const LeaveManagementContent: React.FC = () => {
                 <Col span={12}>
                   <div className={styles.detailItem}>
                     <label>Approved Date:</label>
-                    <span>{dayjs(selectedLeave.approvedDate).format('MMM DD, YYYY HH:mm')}</span>
+                    <span className={styles.detailValue}>
+                      {dayjs(selectedLeave.approvedDate).format('MMM DD, YYYY HH:mm')}
+                    </span>
                   </div>
                 </Col>
               )}
@@ -751,6 +827,28 @@ const LeaveManagementContent: React.FC = () => {
           </div>
         )}
       </Modal>
+
+      {/* Add/Edit Leave Drawer (Placeholder) */}
+      <Drawer
+        title="Add New Leave Request"
+        placement="right"
+        size="large"
+        open={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        width={500}
+      >
+        <div style={{ padding: '20px 0' }}>
+          <p>Leave form will be implemented here</p>
+          <p>This would include:</p>
+          <ul>
+            <li>User selection</li>
+            <li>Leave type selection</li>
+            <li>Date range picker</li>
+            <li>Reason text area</li>
+            <li>Attachment upload</li>
+          </ul>
+        </div>
+      </Drawer>
     </div>
   );
 };
